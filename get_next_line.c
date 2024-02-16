@@ -5,33 +5,65 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: josvieir <josvieir@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/12 18:07:24 by josvieir          #+#    #+#             */
-/*   Updated: 2024/02/14 17:24:26 by josvieir         ###   ########.fr       */
+/*   Created: 2024/02/15 22:48:43 by josvieir          #+#    #+#             */
+/*   Updated: 2024/02/16 00:15:23 by josvieir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+int	ft_strlen(char *s)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i])
+		i++;
+	return (i);
+}
+
 char	*get_next_line(int fd)
 {
-	char	buffer;
-	char	line[7000000];
-	int		b;
-	int		i;
+	static char	*temp;
+	char		*buffer;
+	int			bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+		return (free(temp), temp = NULL, NULL);
+	if (have_n(temp))
+		return (print_line(&temp));
+	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
 		return (NULL);
-	i = 0;
-	b = read(fd, &buffer, 1);
-	while (b > 0)
+	bytes_read = 1;
+	while (bytes_read > 0)
 	{
-		line[i++] = buffer;
-		if (buffer == '\n')
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		buffer[bytes_read] = 0;
+		temp = ft_strjoin(temp, buffer);
+		if (have_n(temp))
 			break ;
-		b = read(fd, &buffer, 1);
 	}
-	line[i] = '\0';
-	if (b <= 0 && i == 0)
-		return (NULL);
-	return (ft_strdup(line));
+	if (buffer)
+		free(buffer);
+	buffer = NULL;
+	return (print_line(&temp));
 }
+
+/*int main(void)
+{
+	int fd = open("fd", O_RDONLY);
+	char	*str;
+	int		i = 0;
+
+	while (i < 10)
+	{
+		str = get_next_line(fd);
+		printf("%s", str);
+		free(str);
+		i++;
+	}
+	return (0);
+}*/
