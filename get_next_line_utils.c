@@ -6,7 +6,7 @@
 /*   By: josvieir <josvieir@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 23:21:25 by josvieir          #+#    #+#             */
-/*   Updated: 2024/02/16 00:05:02 by josvieir         ###   ########.fr       */
+/*   Updated: 2024/02/17 18:53:54 by josvieir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,58 +14,58 @@
 
 char	*ft_strdup(char *str, int len)
 {
-	char	*array;
+	char	*duplicate;
 	int		count;
 
 	if (!str || !len)
 		return (NULL);
 	count = -1;
-	array = (char *)malloc((len + 1) * sizeof(char));
+	duplicate = (char *)malloc((len + 1) * sizeof(char));
 	while (++count < len)
-		array[count] = str[count];
-	array[count] = '\0';
-	return (array);
+		duplicate[count] = str[count];
+	duplicate[count] = '\0';
+	return (duplicate);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	i;
 	int		len;
-	char	*array;
+	char	*str;
 
 	i = 0;
 	len = ft_strlen(s2);
 	if (!s1)
 		return (ft_strdup(s2, len));
 	len = len + ft_strlen(s1);
-	array = (char *)malloc(sizeof(char) * (len + 1));
-	if (!array)
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
 		return (NULL);
 	len = 0;
 	while (s1[i])
-		array[len++] = s1[i++];
+		str[len++] = s1[i++];
 	i = 0;
 	while (s2[i])
-		array[len++] = s2[i++];
-	array[len] = '\0';
+		str[len++] = s2[i++];
+	str[len] = '\0';
 	free(s1);
-	return (array);
+	return (str);
 }
 
-int	have_n(char *temp)
+int	has_new_line(char *temp)
 {
 	int	i;
 
 	if (!temp)
 		return (0);
-	i = -1;
-	while (temp[++i])
+	i = 0;
+	while (temp[i++])
 		if (temp[i] == 10)
 			return (1);
 	return (0);
 }
 
-char	*print_line(char **temp)
+char	*extract_line(char **temp)
 {
 	int		n_pos;
 	char	*return_line;

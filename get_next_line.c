@@ -6,20 +6,20 @@
 /*   By: josvieir <josvieir@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 22:48:43 by josvieir          #+#    #+#             */
-/*   Updated: 2024/02/16 00:15:23 by josvieir         ###   ########.fr       */
+/*   Updated: 2024/02/17 18:49:11 by josvieir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen(char *s)
+int	ft_strlen(char *str)
 {
 	int	i;
 
 	i = 0;
-	if (!s)
+	if (!str)
 		return (0);
-	while (s[i])
+	while (str[i])
 		i++;
 	return (i);
 }
@@ -32,8 +32,8 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (free(temp), temp = NULL, NULL);
-	if (have_n(temp))
-		return (print_line(&temp));
+	if (has_new_line(temp))
+		return (extract_line(&temp));
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
@@ -43,13 +43,13 @@ char	*get_next_line(int fd)
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		buffer[bytes_read] = 0;
 		temp = ft_strjoin(temp, buffer);
-		if (have_n(temp))
+		if (has_new_line(temp))
 			break ;
 	}
 	if (buffer)
 		free(buffer);
 	buffer = NULL;
-	return (print_line(&temp));
+	return (extract_line(&temp));
 }
 
 /*int main(void)
