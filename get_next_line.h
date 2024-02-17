@@ -6,7 +6,7 @@
 /*   By: josvieir <josvieir@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 23:21:02 by josvieir          #+#    #+#             */
-/*   Updated: 2024/02/17 18:50:56 by josvieir         ###   ########.fr       */
+/*   Updated: 2024/02/17 19:59:27 by josvieir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@
 int		ft_strlen(char *s);
 char	*ft_strdup(char *str, int len);
 char	*ft_strjoin(char *s1, char *s2);
-char	*ft_loop(char *str1, char *str2);
 int		has_new_line(char *temp);
 char	*extract_line(char **temp);
 char	*get_next_line(int fd);
+char	*continue_reading(int fd, char **temp);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: josvieir <josvieir@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 22:48:43 by josvieir          #+#    #+#             */
-/*   Updated: 2024/02/17 18:49:11 by josvieir         ###   ########.fr       */
+/*   Updated: 2024/02/17 20:01:40 by josvieir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,11 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-char	*get_next_line(int fd)
+char	*continue_reading(int fd, char **temp)
 {
-	static char	*temp;
-	char		*buffer;
-	int			bytes_read;
+	char	*buffer;
+	int		bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return (free(temp), temp = NULL, NULL);
-	if (has_new_line(temp))
-		return (extract_line(&temp));
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
@@ -42,14 +37,29 @@ char	*get_next_line(int fd)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		buffer[bytes_read] = 0;
-		temp = ft_strjoin(temp, buffer);
-		if (has_new_line(temp))
+		*temp = ft_strjoin(*temp, buffer);
+		if (has_new_line(*temp))
 			break ;
 	}
 	if (buffer)
 		free(buffer);
 	buffer = NULL;
-	return (extract_line(&temp));
+	return (extract_line(temp));
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*temp;
+
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	{
+		free(temp);
+		temp = NULL;
+		return (NULL);
+	}
+	if (has_new_line(temp))
+		return (extract_line(&temp));
+	return (continue_reading(fd, &temp));
 }
 
 /*int main(void)
